@@ -1,0 +1,88 @@
+
+{% extends "base.html" %}
+
+{% block title %}Your Cart — MaxWay{% endblock %}
+
+{% block content %}
+
+<section class="cart-section">
+
+    <!-- CART HEADER -->
+    <div class="cart-heading">
+
+        <div>
+            <p class="eyebrow">YOUR ORDER</p>
+            <h1>Your Cart</h1>
+
+            <p class="menu-description">
+                Review your selected products before ordering.
+            </p>
+        </div>
+
+        <a href="{% url 'menu' %}" class="continue-shopping">
+            ← Continue shopping
+        </a>
+
+    </div>
+
+
+    <!-- CART CONTENT -->
+    <div class="cart-layout">
+
+        <div class="cart-products">
+
+            <!-- JavaScript renders products here -->
+            <div
+                id="cart-items"
+                data-remove-url="{% url 'remove_from_cart' 0 %}"
+            >
+                <p class="loading-cart">Loading your cart...</p>
+            </div>
+
+        </div>
+
+
+        <!-- ORDER SUMMARY -->
+        <aside class="cart-summary">
+
+            <h2>Order Summary</h2>
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span id="cart-subtotal">0 UZS</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Delivery</span>
+                <span>Calculated later</span>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-total">
+                <span>Total</span>
+                <span id="cart-total">0 UZS</span>
+            </div>
+
+            <button
+                id="clear-cart"
+                class="clear-cart-button"
+                type="button"
+            >
+                Clear cart
+            </button>
+
+            <a href="{% url 'menu' %}" class="cart-menu-link">
+                Continue shopping
+            </a>
+            <a href="{% url 'checkout' %}" class="checkout-button">
+                Proceed to checkout
+            </a>
+
+        </aside>
+
+    </div>
+
+</section>
+
+{% endblock %}

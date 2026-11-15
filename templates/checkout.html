@@ -1,0 +1,149 @@
+
+{% extends "base.html" %}
+
+{% block title %}Checkout | MaxWay{% endblock %}
+
+{% block content %}
+
+<section class="mw-checkout">
+
+    <div class="mw-checkout-layout">
+
+        <!-- LEFT SIDE -->
+        <div class="mw-checkout-info">
+
+            <div>
+                <span class="mw-checkout-label">MAXWAY / CHECKOUT</span>
+
+                <h1>
+                    Almost there.<br>
+                    <span>Enjoy your food.</span>
+                </h1>
+
+                <p class="mw-checkout-description">
+                    Just a few details and your order will be ready.
+                    Complete the form to place your order with MaxWay.
+                </p>
+            </div>
+
+            <div class="mw-checkout-steps">
+
+                <div class="mw-step">
+                    <span class="mw-step-number">01</span>
+                    <div>
+                        <h3>Choose your food</h3>
+                        <p>Your favourite meals are in your cart.</p>
+                    </div>
+                </div>
+
+                <div class="mw-step">
+                    <span class="mw-step-number">02</span>
+                    <div>
+                        <h3>Enter your details</h3>
+                        <p>Tell us who is placing the order.</p>
+                    </div>
+                </div>
+
+                <div class="mw-step">
+                    <span class="mw-step-number">03</span>
+                    <div>
+                        <h3>Place your order</h3>
+                        <p>Choose your preferred payment method.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mw-checkout-note">
+                <span class="mw-note-icon">✓</span>
+                <p>Fresh food. Simple ordering. That's MaxWay.</p>
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="mw-checkout-card">
+
+            <div class="mw-form-heading">
+                <span class="mw-form-tag">YOUR ORDER</span>
+                <h2>Your information</h2>
+                <p>Please enter your contact details below.</p>
+            </div>
+
+            <form method="POST" class="mw-checkout-form">
+
+                {% csrf_token %}
+
+                <div class="mw-form-grid">
+
+                    <div class="mw-form-group">
+                        <label for="first_name">First name</label>
+                        <input
+                            type="text"
+                            id="first_name"
+                            name="first_name"
+                            placeholder="John"
+                            required
+                        >
+                    </div>
+
+                    <div class="mw-form-group">
+                        <label for="last_name">Last name</label>
+                        <input
+                            type="text"
+                            id="last_name"
+                            name="last_name"
+                            placeholder="Smith"
+                            required
+                        >
+                    </div>
+
+                    <div class="mw-form-group mw-full-width">
+                        <label for="phone_number">Phone number</label>
+                        <input
+                            type="tel"
+                            id="phone_number"
+                            name="phone_number"
+                            placeholder="+998 90 123 45 67"
+                            required
+                        >
+                    </div>
+
+                    <div class="mw-form-group mw-full-width">
+                        <label for="payment_method">Payment method</label>
+
+                        <select
+                            id="payment_method"
+                            name="payment_method"
+                            required
+                        >
+                            <option value="" disabled selected>
+                                Select payment method
+                            </option>
+
+                            <option value="card">Card</option>
+                            <option value="cash">Cash</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <button type="submit" class="mw-place-order">
+                    Place order
+                    <span>→</span>
+                </button>
+
+            </form>
+
+            <div class="mw-checkout-footer">
+                <a href="{% url 'cart' %}">← Back to cart</a>
+                <span>MaxWay</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
