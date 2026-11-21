@@ -1,0 +1,143 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders | MaxWay</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/management.css' %}">
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="logo"><span>MAX</span>WAY</div>
+        <p class="menu-label">MENU</p>
+        <nav>
+            <a href="{% url 'dashboard' %}" class="nav-link"><span class="nav-icon">▦</span> Dashboard</a>
+            <a href="{% url 'dashboard_order' %}" class="nav-link active"><span class="nav-icon">▤</span> Orders</a>
+            <a href="{% url 'dashboard_product' %}" class="nav-link"><span class="nav-icon">▣</span> Products</a>
+            <a href="{% url 'dashboard_customer' %}" class="nav-link"><span class="nav-icon">◉</span> Customers</a>
+            <a href="{% url 'dashboard_category' %}" class="nav-link"><span class="nav-icon">▧</span> Categories</a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="{% url 'logout' %}" class="logout"><span>↪</span> Logout</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <h2>Orders</h2>
+                <p>Manage and monitor customer orders.</p>
+            </div>
+            <div class="admin-profile">
+                <div class="avatar">{{ request.user.username|first|upper }}</div>
+                <div>
+                    <strong>{{ request.user.username }}</strong>
+                    <small>Administrator</small>
+                </div>
+            </div>
+        </header>
+
+        <section class="page-summary">
+            <div>
+                <span>Total Orders</span>
+                <h2>{{ orders|length }}</h2>
+                <p>Customer orders received</p>
+            </div>
+            <div class="summary-icon">▤</div>
+        </section>
+
+        <section class="data-section">
+            <div class="data-heading">
+                <h3>All Orders</h3>
+                <p>Complete list of customer orders</p>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ORDER ID</th>
+                            <th>CUSTOMER</th>
+                            <th>DATE</th>
+                            <th>PAYMENT</th>
+                            <th>STATUS</th>
+                            <th>TOTAL</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td class="primary-text">#{{ order.order_id }}</td>
+                            <td>
+                                <div class="customer-name">
+                                    {{ order.customer.first_name }} {{ order.customer.last_name }}
+                                </div>
+                            </td>
+                            <td>{{ order.created_at|date:"d M Y, H:i" }}</td>
+                            <td>{{ order.payment_method }}</td>
+                            <td><span class="count-label">{{ order.status }}</span></td>
+                            <td class="price-text">{{ order.total_price }} UZS</td>
+                            <td>
+                                <div class="crud-actions">
+                                    <details class="crud-edit-details">
+                                        <summary class="crud-edit-button">Edit Status</summary>
+
+                                        <form method="POST" action="{% url 'dashboard_order' %}" class="crud-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="crud_action" value="update">
+                                            <input type="hidden" name="order_id" value="{{ order.id }}">
+
+                                            <h3>Update Order Status</h3>
+
+                                            <div class="crud-field">
+                                                <label>Order status</label>
+                                                <select name="status" required>
+                                                    <option value="Pending" {% if order.status == "Pending" %}selected{% endif %}>Pending</option>
+                                                    <option value="Confirmed" {% if order.status == "Confirmed" %}selected{% endif %}>Confirmed</option>
+                                                    <option value="Preparing" {% if order.status == "Preparing" %}selected{% endif %}>Preparing</option>
+                                                    <option value="Out for delivery" {% if order.status == "Out for delivery" %}selected{% endif %}>Out for delivery</option>
+                                                    <option value="Completed" {% if order.status == "Completed" %}selected{% endif %}>Completed</option>
+                                                    <option value="Cancelled" {% if order.status == "Cancelled" %}selected{% endif %}>Cancelled</option>
+                                                </select>
+                                            </div>
+
+                                            <button type="submit" class="crud-save-button">Save Changes</button>
+                                        </form>
+                                    </details>
+
+                                    <form method="POST" action="{% url 'dashboard_order' %}" onsubmit="return confirm('Delete this order?');">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="crud_action" value="delete">
+                                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                                        <button type="submit" class="crud-delete-button">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="empty-state">
+                                <h3>No orders yet</h3>
+                                <p>Customer orders will appear here.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer><p>© 2026 MaxWay. Administration Panel.</p></footer>
+    </main>
+</div>
+
+</body>
+</html>

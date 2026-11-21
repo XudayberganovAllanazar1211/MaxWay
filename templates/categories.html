@@ -1,0 +1,148 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories | MaxWay</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/management.css' %}">
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="logo"><span>MAX</span>WAY</div>
+        <p class="menu-label">MENU</p>
+        <nav>
+            <a href="{% url 'dashboard' %}" class="nav-link"><span class="nav-icon">▦</span> Dashboard</a>
+            <a href="{% url 'dashboard_order' %}" class="nav-link"><span class="nav-icon">▤</span> Orders</a>
+            <a href="{% url 'dashboard_product' %}" class="nav-link"><span class="nav-icon">▣</span> Products</a>
+            <a href="{% url 'dashboard_customer' %}" class="nav-link"><span class="nav-icon">◉</span> Customers</a>
+            <a href="{% url 'dashboard_category' %}" class="nav-link active"><span class="nav-icon">▧</span> Categories</a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="{% url 'logout' %}" class="logout"><span>↪</span> Logout</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <h2>Categories</h2>
+                <p>Organize your restaurant menu.</p>
+            </div>
+            <div class="admin-profile">
+                <div class="avatar">{{ request.user.username|first|upper }}</div>
+                <div>
+                    <strong>{{ request.user.username }}</strong>
+                    <small>Administrator</small>
+                </div>
+            </div>
+        </header>
+
+        <section class="page-summary">
+            <div>
+                <span>Total Categories</span>
+                <h2>{{ categories|length }}</h2>
+                <p>Categories in your menu</p>
+            </div>
+            <div class="summary-icon">▧</div>
+        </section>
+
+        <section class="data-section">
+            <div class="data-heading management-heading">
+                <div>
+                    <h3>All Categories</h3>
+                    <p>Manage your food categories</p>
+                </div>
+                <details class="crud-details">
+                    <summary class="crud-add-button">+ Add Category</summary>
+                    <form method="POST" action="{% url 'dashboard_category' %}" class="crud-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="crud_action" value="create">
+                        <h3>Add New Category</h3>
+                        <div class="crud-form-grid">
+                            <div class="crud-field">
+                                <label for="new-category-name">Category name</label>
+                                <input id="new-category-name" type="text" name="name" placeholder="Pizza" required>
+                            </div>
+                            <div class="crud-field">
+                                <label for="new-category-slug">Slug</label>
+                                <input id="new-category-slug" type="text" name="slug" placeholder="pizza" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="crud-save-button">Create Category</button>
+                    </form>
+                </details>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>CATEGORY NAME</th>
+                            <th>SLUG</th>
+                            <th>PRODUCTS</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for category in categories %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td class="primary-text">{{ category.name }}</td>
+                            <td>{{ category.slug }}</td>
+                            <td><span class="count-label">{{ category.products.count }}</span></td>
+                            <td>
+                                <div class="crud-actions">
+                                    <details class="crud-edit-details">
+                                        <summary class="crud-edit-button">Edit</summary>
+                                        <form method="POST" action="{% url 'dashboard_category' %}" class="crud-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="crud_action" value="update">
+                                            <input type="hidden" name="category_id" value="{{ category.id }}">
+                                            <h3>Edit Category</h3>
+                                            <div class="crud-form-grid">
+                                                <div class="crud-field">
+                                                    <label>Category name</label>
+                                                    <input type="text" name="name" value="{{ category.name }}" required>
+                                                </div>
+                                                <div class="crud-field">
+                                                    <label>Slug</label>
+                                                    <input type="text" name="slug" value="{{ category.slug }}" required>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="crud-save-button">Save Changes</button>
+                                        </form>
+                                    </details>
+                                    <form method="POST" action="{% url 'dashboard_category' %}" onsubmit="return confirm('Delete this category?');">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="crud_action" value="delete">
+                                        <input type="hidden" name="category_id" value="{{ category.id }}">
+                                        <button type="submit" class="crud-delete-button">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="empty-state">
+                                <h3>No categories found</h3>
+                                <p>Your categories will appear here.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer><p>© 2026 MaxWay. Administration Panel.</p></footer>
+    </main>
+</div>
+
+</body>
+</html>

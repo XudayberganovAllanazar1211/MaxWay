@@ -1,0 +1,208 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers | MaxWay</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/management.css' %}">
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="logo"><span>MAX</span>WAY</div>
+        <p class="menu-label">MENU</p>
+        <nav>
+            <a href="{% url 'dashboard' %}" class="nav-link"><span class="nav-icon">▦</span> Dashboard</a>
+            <a href="{% url 'dashboard_order' %}" class="nav-link"><span class="nav-icon">▤</span> Orders</a>
+            <a href="{% url 'dashboard_product' %}" class="nav-link"><span class="nav-icon">▣</span> Products</a>
+            <a href="{% url 'dashboard_customer' %}" class="nav-link active"><span class="nav-icon">◉</span> Customers</a>
+            <a href="{% url 'dashboard_category' %}" class="nav-link"><span class="nav-icon">▧</span> Categories</a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="{% url 'logout' %}" class="logout"><span>↪</span> Logout</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <h2>Customers</h2>
+                <p>Manage your restaurant customers.</p>
+            </div>
+            <div class="admin-profile">
+                <div class="avatar">{{ request.user.username|first|upper }}</div>
+                <div>
+                    <strong>{{ request.user.username }}</strong>
+                    <small>Administrator</small>
+                </div>
+            </div>
+        </header>
+
+        <section class="page-summary">
+            <div>
+                <span>Total Customers</span>
+                <h2>{{ customers|length }}</h2>
+                <p>Customers registered in your restaurant</p>
+            </div>
+            <div class="summary-icon">◉</div>
+        </section>
+
+        <section class="data-section">
+            <div class="data-heading management-heading">
+                <div>
+                    <h3>All Customers</h3>
+                    <p>Manage your customer information</p>
+                </div>
+
+                <details class="crud-details">
+                    <summary class="crud-add-button">+ Add Customer</summary>
+
+                    <form method="POST" action="{% url 'dashboard_customer' %}" class="crud-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="crud_action" value="create">
+
+                        <h3>Add New Customer</h3>
+
+                        <div class="crud-form-grid">
+                            <div class="crud-field">
+                                <label>First name</label>
+                                <input type="text" name="first_name" placeholder="First name" required>
+                            </div>
+
+                            <div class="crud-field">
+                                <label>Last name</label>
+                                <input type="text" name="last_name" placeholder="Last name" required>
+                            </div>
+
+                            <div class="crud-field">
+                                <label>Phone number</label>
+                                <input type="tel" name="phone_number" placeholder="+998..." required>
+                            </div>
+
+                            <div class="crud-field">
+                                <label>Email</label>
+                                <input type="email" name="email" placeholder="example@gmail.com" required>
+                            </div>
+
+                            <div class="crud-field crud-full-width">
+                                <label>Address</label>
+                                <textarea name="address" rows="3" placeholder="Customer address..." required></textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="crud-save-button">Create Customer</button>
+                    </form>
+                </details>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>CUSTOMER</th>
+                            <th>PHONE</th>
+                            <th>EMAIL</th>
+                            <th>ADDRESS</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for customer in customers %}
+                        <tr>
+                            <td>{{ customer.id }}</td>
+
+                            <td>
+                                <div class="customer-cell">
+                                    <div class="customer-avatar">
+                                        {{ customer.first_name|first|upper }}
+                                    </div>
+                                    <strong>{{ customer.first_name }} {{ customer.last_name }}</strong>
+                                </div>
+                            </td>
+
+                            <td>{{ customer.phone_number }}</td>
+                            <td>{{ customer.email }}</td>
+                            <td>{{ customer.address }}</td>
+
+                            <td>
+                                <div class="crud-actions">
+                                    <details class="crud-edit-details">
+                                        <summary class="crud-edit-button">Edit</summary>
+
+                                        <form method="POST" action="{% url 'dashboard_customer' %}" class="crud-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="crud_action" value="update">
+                                            <input type="hidden" name="customer_id" value="{{ customer.id }}">
+
+                                            <h3>Edit Customer</h3>
+
+                                            <div class="crud-form-grid">
+                                                <div class="crud-field">
+                                                    <label>First name</label>
+                                                    <input type="text" name="first_name" value="{{ customer.first_name }}" required>
+                                                </div>
+
+                                                <div class="crud-field">
+                                                    <label>Last name</label>
+                                                    <input type="text" name="last_name" value="{{ customer.last_name }}" required>
+                                                </div>
+
+                                                <div class="crud-field">
+                                                    <label>Phone number</label>
+                                                    <input type="tel" name="phone_number" value="{{ customer.phone_number }}" required>
+                                                </div>
+
+                                                <div class="crud-field">
+                                                    <label>Email</label>
+                                                    <input type="email" name="email" value="{{ customer.email }}" required>
+                                                </div>
+
+                                                <div class="crud-field crud-full-width">
+                                                    <label>Address</label>
+                                                    <textarea name="address" rows="3" required>{{ customer.address }}</textarea>
+                                                </div>
+                                            </div>
+
+                                            <button type="submit" class="crud-save-button">Save Changes</button>
+                                        </form>
+                                    </details>
+
+                                    <form method="POST" action="{% url 'dashboard_customer' %}" onsubmit="return confirm('Delete this customer?');">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="crud_action" value="delete">
+                                        <input type="hidden" name="customer_id" value="{{ customer.id }}">
+
+                                        <button type="submit" class="crud-delete-button">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                <h3>No customers found</h3>
+                                <p>Your customers will appear here.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2026 MaxWay. Administration Panel.</p>
+        </footer>
+    </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | MaxWay</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="logo"><span>MAX</span>WAY</div>
+
+        <p class="menu-label">MENU</p>
+
+        <nav>
+            <a href="{% url 'dashboard' %}" class="nav-link active">
+                <span class="nav-icon">▦</span> Dashboard
+            </a>
+
+            <a href="{% url 'dashboard_order' %}" class="nav-link">
+                <span class="nav-icon">▤</span> Orders
+            </a>
+
+            <a href="{% url 'dashboard_product' %}" class="nav-link">
+                <span class="nav-icon">▣</span> Products
+            </a>
+
+            <a href="{% url 'dashboard_customer' %}" class="nav-link">
+                <span class="nav-icon">◉</span> Customers
+            </a>
+
+            <a href="{% url 'dashboard_category' %}" class="nav-link">
+                <span class="nav-icon">▧</span> Categories
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="{% url 'logout' %}" class="logout">
+                <span>↪</span> Logout
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h2>Dashboard</h2>
+                <p>Manage your restaurant and monitor its activity.</p>
+            </div>
+
+            <div class="admin-profile">
+                <div class="avatar">
+                    {{ request.user.username|first|upper }}
+                </div>
+                <div>
+                    <strong>{{ request.user.username }}</strong>
+                    <small>Administrator</small>
+                </div>
+            </div>
+        </header>
+
+        <section class="welcome">
+            <div>
+                <span class="welcome-tag">MAXWAY ADMINISTRATION</span>
+                <h1>Welcome back!</h1>
+                <p>Here's what's happening with your restaurant.</p>
+            </div>
+            <div class="welcome-icon">🍔</div>
+        </section>
+
+        <section class="section">
+
+            <div class="section-heading">
+                <h3>Overview</h3>
+                <span>Your store statistics</span>
+            </div>
+
+            <div class="stats-grid">
+
+                <a href="{% url 'dashboard_order' %}" class="stat-card">
+                    <div class="stat-top">
+                        <span>Total Orders</span>
+                        <span class="stat-icon red">▤</span>
+                    </div>
+                    <h2>{{ orders }}</h2>
+                    <p>All received orders</p>
+                </a>
+
+                <a href="{% url 'dashboard_product' %}" class="stat-card">
+                    <div class="stat-top">
+                        <span>Total Products</span>
+                        <span class="stat-icon orange">▣</span>
+                    </div>
+                    <h2>{{ products }}</h2>
+                    <p>Products in your menu</p>
+                </a>
+
+                <a href="{% url 'dashboard_customer' %}" class="stat-card">
+                    <div class="stat-top">
+                        <span>Customers</span>
+                        <span class="stat-icon green">◉</span>
+                    </div>
+                    <h2>{{ customers }}</h2>
+                    <p>All registered customers</p>
+                </a>
+
+                <a href="{% url 'dashboard_category' %}" class="stat-card">
+                    <div class="stat-top">
+                        <span>Categories</span>
+                        <span class="stat-icon blue">▧</span>
+                    </div>
+                    <h2>{{ categories }}</h2>
+                    <p>Menu categories</p>
+                </a>
+
+            </div>
+        </section>
+
+        <section class="section">
+
+            <div class="section-heading">
+                <h3>Quick access</h3>
+                <span>Manage your restaurant</span>
+            </div>
+
+            <div class="quick-grid">
+
+                <a href="{% url 'dashboard_order' %}" class="quick-card">
+                    <div class="quick-icon">▤</div>
+                    <h4>Manage Orders</h4>
+                    <p>View customer orders and payment information.</p>
+                    <span class="quick-link">View orders →</span>
+                </a>
+
+                <a href="{% url 'dashboard_product' %}" class="quick-card">
+                    <div class="quick-icon">▣</div>
+                    <h4>Manage Products</h4>
+                    <p>View and organize your restaurant menu.</p>
+                    <span class="quick-link">View products →</span>
+                </a>
+
+                <a href="{% url 'dashboard_customer' %}" class="quick-card">
+                    <div class="quick-icon">◉</div>
+                    <h4>Manage Customers</h4>
+                    <p>View customer contact information.</p>
+                    <span class="quick-link">View customers →</span>
+                </a>
+
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2026 MaxWay. Administration Panel.</p>
+        </footer>
+
+    </main>
+</div>
+
+</body>
+</html>

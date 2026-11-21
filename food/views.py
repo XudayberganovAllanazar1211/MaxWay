@@ -1,6 +1,4 @@
 from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.db import transaction
 from .models import Product, Customer, Order, OrderProduct
 import uuid
 
